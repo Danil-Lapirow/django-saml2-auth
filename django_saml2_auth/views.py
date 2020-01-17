@@ -15,7 +15,7 @@ from pkg_resources import parse_version
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth import login, logout, get_user_model, get_user_model
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.template import TemplateDoesNotExist
@@ -182,8 +182,8 @@ def acs(r):
     try:
         target_user = User.objects.get(
             **{
-                settings.AUTH_USER_MODEL.USERNAME_FIELD:
-                attributes[settings.AUTH_USER_MODEL.USERNAME_FIELD]
+                get_user_model().USERNAME_FIELD:
+                attributes[get_user_model().USERNAME_FIELD]
             })
         if settings.SAML2_AUTH.get('TRIGGER', {}).get('UPDATE_USER_HOOK', None):
             import_string(settings.SAML2_AUTH['TRIGGER']['UPDATE_USER_HOOK'])(r, target_user, attributes, user_identity)
