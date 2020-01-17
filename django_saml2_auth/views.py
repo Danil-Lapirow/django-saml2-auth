@@ -207,23 +207,12 @@ def acs(r):
     else:
         return HttpResponseRedirect(get_reverse([denied, 'denied', 'django_saml2_auth:denied']))
 
-    if settings.SAML2_AUTH.get('USE_JWT') is True:
-        # We use JWT auth send token to frontend
-        jwt_token = jwt_encode(target_user)
-        query = '?uid={}&token={}'.format(target_user.id, jwt_token)
+    response = HttpResponseRedirect(next_url)
 
-        frontend_url = settings.SAML2_AUTH.get(
-            'FRONTEND_URL', next_url)
+    if settings.SAML2_AUTH.get('TRIGGER', {}).get('AFTER_LOGIN', None):
+        import_string(settings.SAML2_AUTH['TRIGGER']['AFTER_LOGIN'])(r, response, target_user, attributes, user_identity)
 
-        return HttpResponseRedirect(frontend_url+query)
-
-    if is_new_user:
-        try:
-            return render(r, 'django_saml2_auth/welcome.html', {'user': r.user})
-        except TemplateDoesNotExist:
-            return HttpResponseRedirect(next_url)
-    else:
-        return HttpResponseRedirect(next_url)
+    return response
 
 
 def signin(r):
