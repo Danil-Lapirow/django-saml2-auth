@@ -185,6 +185,8 @@ def acs(r):
                 settings.AUTH_USER_MODEL.USERNAME_FIELD:
                 attributes[settings.AUTH_USER_MODEL.USERNAME_FIELD]
             })
+        if settings.SAML2_AUTH.get('TRIGGER', {}).get('UPDATE_USER_HOOK', None):
+            import_string(settings.SAML2_AUTH['TRIGGER']['UPDATE_USER_HOOK'])(r, target_user, attributes, user_identity)
     except User.DoesNotExist:
         new_user_should_be_created = 'CREATE_USER_HOOK' in settings.SAML2_AUTH
         create_user_hook = settings.SAML2_AUTH.get('CREATE_USER_HOOK', None)

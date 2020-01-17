@@ -155,6 +155,7 @@ How to use?
                 'last_name': 'LastName',
             },
             'TRIGGER': {
+                'UPDATE_USER_HOOK': 'path.to.your.update.user.hook.method', # Update a new Django user when a new user logs in. Defaults to None.
                 'BEFORE_LOGIN': 'path.to.your.login.hook.method',
             },
             'ASSERTION_URL': 'https://mysite.com', # Custom URL to validate incoming SAML requests against
