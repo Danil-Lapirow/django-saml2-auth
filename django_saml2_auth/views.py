@@ -173,7 +173,7 @@ def acs(r):
 
     attributes = {
         key: user_identity[value][0]
-        for key, value in settings.SAML2_AUTH.get('ATTRIBUTES_MAP', {})
+        for key, value in settings.SAML2_AUTH.get('ATTRIBUTES_MAP', {}).items()
     }
 
     target_user = None
